@@ -1,0 +1,6 @@
+@StockPriceMonitoringAndAlerts_HostAddress = http://localhost:5230
+
+GET {{StockPriceMonitoringAndAlerts_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
