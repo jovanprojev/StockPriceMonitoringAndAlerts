@@ -50,24 +50,6 @@ namespace StockPriceMonitoringAndAlerts.Controllers
             }
         }
 
-        [HttpPut("{id}/activate")]
-        public async Task<ActionResult<AlertRuleDto>> Activate(int id)
-        {
-            var existingRule = await _service.GetByIdAsync(id);
-            if (existingRule == null) return NotFound();
-
-            try
-            {
-                existingRule.IsActive = true;
-                var updated = await _service.ActivateAsync(id);
-                return Ok(updated);
-            }
-            catch (ArgumentException ex)
-            {
-                return BadRequest(ex.Message);
-            }
-        }
-
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

@@ -87,25 +87,6 @@ namespace StockPriceMonitoringAndAlerts.Services
             };
         }
 
-        public async Task<AlertRuleDto> ActivateAsync(int id)
-        {
-            var rule = await _repository.GetByIdAsync(id);
-            if (rule == null) throw new KeyNotFoundException("Alert rule not found");
-
-            rule.IsActive = true;
-            await _repository.SaveChangesAsync();
-
-            return new AlertRuleDto
-            {
-                Id = rule.Id,
-                StockSymbol = rule.StockSymbol,
-                PriceThreshold = rule.PriceThreshold,
-                Direction = rule.Direction.ToString(),
-                CreatedAt = rule.CreatedAt,
-                IsActive = rule.IsActive
-            };
-        }
-
         public async Task DeleteAsync(int id)
         {
             var rule = await _repository.GetByIdAsync(id);

@@ -1,4 +1,5 @@
 ﻿using StockPriceMonitoringAndAlerts.DTOs.Stock;
+using StockPriceMonitoringAndAlerts.Models;
 using System.Text.Json;
 
 namespace StockPriceMonitoringAndAlerts.Services
@@ -14,14 +15,13 @@ namespace StockPriceMonitoringAndAlerts.Services
             _apiKey = config["Finnhub:ApiKey"];
         }
 
-        public async Task<StockQuoteDTO?> GetQuoteAsync(string symbol)
+        public async Task<StockQuoteDTO> GetQuoteAsync(StockSymbol symbol)
         {
             var url = $"https://finnhub.io/api/v1/quote?symbol={symbol}&token={_apiKey}";
             var response = await _http.GetAsync(url);
-            if (!response.IsSuccessStatusCode) return null;
-
+            if (!response.IsSuccessStatusCode) throw new HttpRequestException($"Failed to fetch quote for {symbol}");
             var json = await response.Content.ReadAsStringAsync();
-            return JsonSerializer.Deserialize<StockQuoteDTO>(json);
+            return JsonSerializer.Deserialize<StockQuoteDTO>(json) ?? throw new JsonException("Failed to deserialize stock quote");
         }
     }
 }

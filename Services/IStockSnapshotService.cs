@@ -3,8 +3,8 @@ using StockPriceMonitoringAndAlerts.Models;
 
 namespace StockPriceMonitoringAndAlerts.Services
 {
-    public interface IStockApiClient
+    public interface IStockSnapshotService
     {
-        Task<StockQuoteDTO> GetQuoteAsync(StockSymbol symbol);
+        List<StockQuoteSnapshot> CreateSnapshots(IEnumerable<StockSymbol> symbols);
     }
 }

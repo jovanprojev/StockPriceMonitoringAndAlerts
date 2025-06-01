@@ -17,6 +17,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAlertRuleRepository, AlertRuleRepository>();
 builder.Services.AddScoped<IAlertRuleService, AlertRuleService>();
+builder.Services.AddScoped<IAlertRuleEvaluator, AlertRuleEvaluator>();
+builder.Services.AddScoped<IStockSnapshotService, StockSnapshotService>();
+builder.Services.AddScoped<IStockApiClient, StockApiClient>();
+builder.Services.AddScoped<IStockPriceCacheService, StockPriceCacheService>();
+//builder.Services.AddSingleton<IStockSnapshotService, StockSnapshotService>();
 
 builder.Services.AddHttpClient<IStockApiClient, StockApiClient>();
 builder.Services.AddSingleton<IStockPriceCacheService, StockPriceCacheService>();
