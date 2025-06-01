@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using StockPriceMonitoringAndAlerts.BackgroundServices;
 using StockPriceMonitoringAndAlerts.Converters;
 using StockPriceMonitoringAndAlerts.Data;
 using StockPriceMonitoringAndAlerts.Models;
@@ -16,6 +17,11 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddScoped<IAlertRuleRepository, AlertRuleRepository>();
 builder.Services.AddScoped<IAlertRuleService, AlertRuleService>();
+
+builder.Services.AddHttpClient<IStockApiClient, StockApiClient>();
+builder.Services.AddSingleton<IStockPriceCacheService, StockPriceCacheService>();
+builder.Services.AddHostedService<StockPollingService>();
+builder.Services.AddMemoryCache();
 
 // Add connection to the database
 builder.Services.AddDbContext<AppDbContext>(options =>
