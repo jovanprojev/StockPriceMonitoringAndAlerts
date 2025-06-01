@@ -8,7 +8,6 @@ namespace StockPriceMonitoringAndAlerts.Services
         Task<AlertRuleDto?> GetByIdAsync(int id);
         Task<AlertRuleDto> CreateAsync(CreateAlertRuleDto dto);
         Task<IEnumerable<AlertRuleDto>> GetActiveAlertRulesAsync();
-        Task<AlertRuleDto> ActivateAsync(int id);
         Task DeleteAsync(int id);
     }
 }
