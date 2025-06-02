@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.SignalR;
+using Microsoft.EntityFrameworkCore;
 using StockPriceMonitoringAndAlerts.Data;
 using StockPriceMonitoringAndAlerts.DTOs.Stock;
+using StockPriceMonitoringAndAlerts.Hubs;
 using StockPriceMonitoringAndAlerts.Models;
 
 namespace StockPriceMonitoringAndAlerts.Services
@@ -9,11 +11,13 @@ namespace StockPriceMonitoringAndAlerts.Services
     {
         private readonly AppDbContext _db;
         private readonly ILogger<AlertRuleEvaluator> _logger;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public AlertRuleEvaluator(AppDbContext db, ILogger<AlertRuleEvaluator> logger)
+        public AlertRuleEvaluator(AppDbContext db, ILogger<AlertRuleEvaluator> logger, IHubContext<NotificationHub> hubContext)
         {
             _db = db;
             _logger = logger;
+            _hubContext = hubContext;
         }
 
         public async Task EvaluateAsync(IEnumerable<StockQuoteSnapshot> stockPrices)
@@ -41,12 +45,16 @@ namespace StockPriceMonitoringAndAlerts.Services
                         {
                             rule.IsActive = true;
 
+                            var direction = $"{rule.Direction}".ToLower();
+
                             var alert = new Alert
                             {
                                 AlertRuleId = rule.Id,
-                                Message = $"[LOG] Alert: {stockPrice.Symbol} is {stockPrice.Price}",
+                                Message = $"{stockPrice.Symbol} goes {direction} {rule.PriceThreshold}",
                                 CreatedAt = DateTime.UtcNow
                             };
+
+                            await _hubContext.Clients.All.SendAsync("ReceiveNotification", alert.Message);
 
                             _db.Alerts.Add(alert);
                             _logger.LogInformation(alert.Message);
