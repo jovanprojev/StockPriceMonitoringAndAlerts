@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>📈 Stock Monitor</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/microsoft-signalr/7.0.5/signalr.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <h2>📊 Latest Stock Prices</h2>
+    <table id="stock-table">
+        <thead>
+            <tr>
+                <th>Symbol</th>
+                <th>Price</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody id="stockTableBody">
+        </tbody>
+    </table>
+
+    <h2>➕ Create Alert Rule</h2>
+    <form id="alert-form">
+        <label>
+            Symbol:
+            <select id="symbol">
+                <option value="AAPL">AAPL</option>
+                <option value="GOOGL">GOOGL</option>
+                <option value="MSFT">MSFT</option>
+                <option value="AMZN">AMZN</option>
+                <option value="TSLA">TSLA</option>
+            </select>
+        </label>
+        <br><br>
+        <label>
+            Price Threshold:
+            <input type="number" id="threshold" step="0.01" required />
+        </label>
+        <br><br>
+        <label>
+            Direction:
+            <select id="direction">
+                <option value="Above">Above</option>
+                <option value="Below">Below</option>
+            </select>
+        </label>
+        <br><br>
+        <button type="submit">Create Alert</button>
+    </form>
+
+    <h2>🔔 Live Notifications</h2>
+    <ul id="notifications"></ul>
+
+    <script src="script.js"></script>
+</body>
+</html>

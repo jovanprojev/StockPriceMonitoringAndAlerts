@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using StockPriceMonitoringAndAlerts.BackgroundServices;
 using StockPriceMonitoringAndAlerts.Converters;
 using StockPriceMonitoringAndAlerts.Data;
+using StockPriceMonitoringAndAlerts.Hubs;
 using StockPriceMonitoringAndAlerts.Models;
 using StockPriceMonitoringAndAlerts.Repositories;
 using StockPriceMonitoringAndAlerts.Services;
@@ -15,13 +16,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddSignalR();
 builder.Services.AddScoped<IAlertRuleRepository, AlertRuleRepository>();
 builder.Services.AddScoped<IAlertRuleService, AlertRuleService>();
 builder.Services.AddScoped<IAlertRuleEvaluator, AlertRuleEvaluator>();
 builder.Services.AddScoped<IStockSnapshotService, StockSnapshotService>();
 builder.Services.AddScoped<IStockApiClient, StockApiClient>();
 builder.Services.AddScoped<IStockPriceCacheService, StockPriceCacheService>();
-//builder.Services.AddSingleton<IStockSnapshotService, StockSnapshotService>();
+
+builder.Services.AddSingleton<INotificationService, SignalRNotificationService>();
 
 builder.Services.AddHttpClient<IStockApiClient, StockApiClient>();
 builder.Services.AddSingleton<IStockPriceCacheService, StockPriceCacheService>();
@@ -74,7 +77,27 @@ builder.Services.Configure<ApiBehaviorOptions>(options =>
     };
 });
 
+// Configure CORS to allow any origin, header, and method
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+    {
+        policy
+            .WithOrigins("http://localhost:5230", "http://127.0.0.1:5230")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials();
+    });
+});
+
 var app = builder.Build();
+
+app.UseCors();
+
+app.UseDefaultFiles();
+app.UseStaticFiles();
+
+app.UseAuthorization();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
@@ -83,10 +106,15 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsDevelopment())
+{
+    app.UseHttpsRedirection();
+}
 
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();
