@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using StockPriceMonitoringAndAlerts.Data;
 using StockPriceMonitoringAndAlerts.Models;
+using System.Linq.Expressions;
 
 namespace StockPriceMonitoringAndAlerts.Repositories
 {
@@ -48,6 +49,11 @@ namespace StockPriceMonitoringAndAlerts.Repositories
                 _context.AlertRules.Remove(rule);
                 await SaveChangesAsync();
             }
+        }
+
+        public async Task<IEnumerable<AlertRule>> FindAsync(Expression<Func<AlertRule, bool>> predicate)
+        {
+            return await _context.AlertRules.Where(predicate).ToListAsync();
         }
     }
 }

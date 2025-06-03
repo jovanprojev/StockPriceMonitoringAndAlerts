@@ -44,6 +44,10 @@ namespace StockPriceMonitoringAndAlerts.Controllers
                 var created = await _service.CreateAsync(dto);
                 return CreatedAtAction(nameof(GetById), new { id = created.Id }, created);
             }
+            catch (ArgumentException ex) when (ex.Message.Contains("already exists"))
+            {
+                return Conflict(ex.Message);
+            }
             catch (ArgumentException ex)
             {
                 return BadRequest(ex.Message);
