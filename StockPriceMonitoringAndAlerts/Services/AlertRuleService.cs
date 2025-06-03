@@ -67,6 +67,15 @@ namespace StockPriceMonitoringAndAlerts.Services
             if (dto.PriceThreshold <= 0)
                 throw new ArgumentException("Price threshold must be greater than zero.");
 
+            var existingRule = await _repository.FindAsync(r =>
+                r.StockSymbol == dto.StockSymbol &&
+                r.PriceThreshold == dto.PriceThreshold &&
+                r.Direction == direction &&
+                r.IsActive == false);
+
+            if (existingRule.Any())
+                throw new ArgumentException("A similar alert rule already exists.");
+
             var rule = new AlertRule
             {
                 StockSymbol = dto.StockSymbol,

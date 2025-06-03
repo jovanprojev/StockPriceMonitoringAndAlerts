@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPriceMonitoringAndAler
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPriceMonitoring.Tests", "StockPriceMonitoring.Tests\StockPriceMonitoring.Tests.csproj", "{9B666BE4-ACBE-410B-91EE-7FAB2C6EA902}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StockPriceMonitoring.IntegrationTests", "StockPriceMonitoring.IntegrationTests\StockPriceMonitoring.IntegrationTests.csproj", "{734B4D5F-4750-4371-A29F-1492B18EFD8D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{9B666BE4-ACBE-410B-91EE-7FAB2C6EA902}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9B666BE4-ACBE-410B-91EE-7FAB2C6EA902}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9B666BE4-ACBE-410B-91EE-7FAB2C6EA902}.Release|Any CPU.Build.0 = Release|Any CPU
+		{734B4D5F-4750-4371-A29F-1492B18EFD8D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{734B4D5F-4750-4371-A29F-1492B18EFD8D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{734B4D5F-4750-4371-A29F-1492B18EFD8D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{734B4D5F-4750-4371-A29F-1492B18EFD8D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

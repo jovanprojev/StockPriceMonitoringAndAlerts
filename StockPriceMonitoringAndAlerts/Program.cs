@@ -32,8 +32,11 @@ builder.Services.AddHostedService<StockPollingService>();
 builder.Services.AddMemoryCache();
 
 // Add connection to the database
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (builder.Environment.EnvironmentName != "IntegrationTests")
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 // Configure JSON serialization to use custom DateTime format
 builder.Services.AddControllers()
@@ -118,3 +121,5 @@ app.MapControllers();
 app.MapHub<NotificationHub>("/notificationHub");
 
 app.Run();
+
+public partial class Program { }
