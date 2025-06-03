@@ -64,6 +64,9 @@ namespace StockPriceMonitoringAndAlerts.Services
             if (!Enum.TryParse<Direction>(dto.Direction, true, out var direction))
                 throw new ArgumentException("Invalid direction value");
 
+            if (dto.PriceThreshold <= 0)
+                throw new ArgumentException("Price threshold must be greater than zero.");
+
             var rule = new AlertRule
             {
                 StockSymbol = dto.StockSymbol,
