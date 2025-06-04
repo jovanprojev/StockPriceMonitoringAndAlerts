@@ -93,6 +93,11 @@ builder.Services.AddCors(options =>
     });
 });
 
+builder.Configuration
+    .AddJsonFile("appsettings.json", optional: false)
+    .AddJsonFile($"appsettings.{builder.Environment.EnvironmentName}.json", optional: true)
+    .AddEnvironmentVariables();
+
 var app = builder.Build();
 
 app.UseCors();
@@ -119,6 +124,26 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.MapHub<NotificationHub>("/notificationHub");
+
+
+// Apply any pending EF Core migrations at application startup.
+// This is especially important when running in Docker containers,
+// where the database may not be initialized yet.
+// In local development (e.g., via Visual Studio), migrations can be run manually,
+// but this ensures automatic setup when deploying or containerizing the app.
+using (var scope = app.Services.CreateScope())
+{
+    try
+    {
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        db.Database.Migrate();
+    }
+    catch (Exception ex)
+    {
+        var logger = scope.ServiceProvider.GetRequiredService<ILogger<Program>>();
+        logger.LogError(ex, "Database migration failed at startup.");
+    }
+}
 
 app.Run();
 
